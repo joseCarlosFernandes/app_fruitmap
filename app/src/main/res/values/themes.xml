@@ -2,7 +2,8 @@
     <!-- Base application theme. -->
     <style name="Base.Theme.Mapfruit" parent="Theme.Material3.DayNight.NoActionBar">
         <!-- Customize your light theme here. -->
-        <!-- <item name="colorPrimary">@color/my_light_primary</item> -->
+        <item name="colorSecondaryContainer">#FFE5CC</item>
+        <item name="colorOnSecondaryContainer">#DE4A0F</item>
     </style>
 
     <style name="Theme.Mapfruit" parent="Base.Theme.Mapfruit" />
