@@ -29,9 +29,6 @@ class MainActivity : AppCompatActivity() {
             insets
         }
 
-
-
-
         val bottomNav = findViewById<BottomNavigationView>(R.id.bottomNavigation)
 
         //estado inicial quando o app é aberto
@@ -39,8 +36,8 @@ class MainActivity : AppCompatActivity() {
             abrirFragment(MapaFragment())
         }
 
-        //barra de navegação
-        bottomNav.setOnNavigationItemSelectedListener { item ->
+        //barra de navegação (atualizado para setOnItemSelectedListener para evitar método depreciado)
+        bottomNav.setOnItemSelectedListener { item ->
             when(item.itemId){
                 R.id.nav_map -> {
                     abrirFragment(MapaFragment())
@@ -48,6 +45,7 @@ class MainActivity : AppCompatActivity() {
                 }
 
                 R.id.nav_perfil -> {
+                    abrirFragment(PerfilFragment())
                     true
                 }
                 else -> false

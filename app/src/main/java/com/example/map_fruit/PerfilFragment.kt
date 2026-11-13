@@ -12,20 +12,12 @@ import android.widget.TextView
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 
-private const val ARG_PARAM1 = "param1"
-private const val ARG_PARAM2 = "param2"
-
 class PerfilFragment : Fragment() {
-    private var param1: String? = null
-    private var param2: String? = null
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        arguments?.let {
-            param1 = it.getString(ARG_PARAM1)
-            param2 = it.getString(ARG_PARAM2)
-        }
-    }
+    private lateinit var btnLogin: Button
+    private lateinit var btnCriar: Button
+    private lateinit var imgPerfil: ImageView
+    private lateinit var nomeUsuario: TextView
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -33,11 +25,30 @@ class PerfilFragment : Fragment() {
     ): View? {
         val view = inflater.inflate(R.layout.fragment_perfil, container, false)
 
-        val btnLogin = view.findViewById<Button>(R.id.btnLogin)
-        val btnCriar = view.findViewById<Button>(R.id.btnCriar)
-        val imgPerfil = view.findViewById<ImageView>(R.id.imgPerfil)
-        val nomeUsuario = view.findViewById<TextView>(R.id.nomeUsuario)
+        btnLogin = view.findViewById(R.id.btnLogin)
+        btnCriar = view.findViewById(R.id.btnCriar)
+        imgPerfil = view.findViewById(R.id.imgPerfil)
+        nomeUsuario = view.findViewById(R.id.nomeUsuario)
 
+        btnCriar.setOnClickListener {
+            val intent = Intent(requireContext(), RegisterActivity::class.java)
+            startActivity(intent)
+        }
+
+        btnLogin.setOnClickListener {
+            val intent = Intent(requireContext(), LoginActivity::class.java)
+            startActivity(intent)
+        }
+
+        return view
+    }
+
+    override fun onResume() {
+        super.onResume()
+        atualizarEstadoUsuario()
+    }
+
+    private fun atualizarEstadoUsuario() {
         val currentUserUid = FirebaseAuth.getInstance().currentUser?.uid
         if (currentUserUid.isNullOrEmpty()) {
             btnLogin.visibility = View.VISIBLE
@@ -66,28 +77,5 @@ class PerfilFragment : Fragment() {
                     nomeUsuario.text = "Erro ao carregar nome"
                 }
         }
-
-        btnCriar.setOnClickListener {
-            val intent = Intent(requireContext(), RegisterActivity::class.java)
-            startActivity(intent)
-        }
-
-        btnLogin.setOnClickListener {
-            val intent = Intent(requireContext(), LoginActivity::class.java)
-            startActivity(intent)
-        }
-
-        return view
-    }
-
-    companion object {
-        @JvmStatic
-        fun newInstance(param1: String, param2: String) =
-            PerfilFragment().apply {
-                arguments = Bundle().apply {
-                    putString(ARG_PARAM1, param1)
-                    putString(ARG_PARAM2, param2)
-                }
-            }
     }
 }
