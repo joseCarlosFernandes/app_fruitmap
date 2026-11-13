@@ -10,7 +10,7 @@
 *.class
 
 # Generated files
-bin/`
+bin/
 gen/
 out/
 
@@ -47,5 +47,5 @@ app/google-services.json
 # Lint
 lint/
 
-# Jetpack Compose Preview cache
+# JetpackCompose Preview cache
 .compose/
