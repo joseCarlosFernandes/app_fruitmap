@@ -34,9 +34,10 @@ class MainActivity : AppCompatActivity() {
         //estado inicial quando o app é aberto
         if(savedInstanceState == null){
             abrirFragment(MapaFragment())
+            bottomNav.selectedItemId = R.id.nav_map
         }
 
-        //barra de navegação (atualizado para setOnItemSelectedListener para evitar método depreciado)
+        //barra de navegação
         bottomNav.setOnItemSelectedListener { item ->
             when(item.itemId){
                 R.id.nav_map -> {
