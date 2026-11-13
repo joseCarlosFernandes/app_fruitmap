@@ -1,0 +1,51 @@
+# Built application files
+*.apk
+*.ap_
+*.aab
+
+# Files for the Dalvik VM
+*.dex
+
+# Java class files
+*.class
+
+# Generated files
+bin/`
+gen/
+out/
+
+# Gradle files
+.gradle/
+build/
+
+# Local configuration file (sdk.dir, API keys, etc.)
+local.properties
+
+# Firebase configuration files
+google-services.json
+app/google-services.json
+
+# IDE files
+.idea/
+.DS_Store
+*.iml
+.apt_generated
+.classpath
+.project
+.settings
+
+# Compiler-generated
+*.orig
+*.rej
+*.bak
+
+# Native build directories
+.externalNativeBuild
+.cxx
+/captures
+
+# Lint
+lint/
+
+# Jetpack Compose Preview cache
+.compose/
