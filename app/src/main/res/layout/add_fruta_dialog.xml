@@ -21,6 +21,8 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:hint="Nome da Fruta"
+        android:textColor="#000000"
+        android:textColorHint="#787878"
         android:layout_marginBottom="12dp" />
 
     <LinearLayout
@@ -34,6 +36,8 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
+            android:textColor="#000000"
+            android:textColorHint="#787878"
             android:hint="Localização (Endereço)" />
 
         <Button
@@ -41,6 +45,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
+            android:backgroundTint="#DE4A0F"
+            android:textColor="#FFFFFF"
             android:text="GPS" />
     </LinearLayout>
 
@@ -49,6 +55,8 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="Salvar"
+        android:backgroundTint="#DE4A0F"
+        android:textColor="#FFFFFF"
         android:layout_marginBottom="16dp" />
 
 </LinearLayout>
