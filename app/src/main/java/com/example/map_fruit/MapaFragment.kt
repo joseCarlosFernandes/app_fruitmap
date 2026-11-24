@@ -6,6 +6,8 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ArrayAdapter
+import android.widget.AutoCompleteTextView
 import android.widget.Button
 import android.widget.EditText
 import android.widget.Toast
@@ -18,10 +20,12 @@ import com.google.android.gms.location.LocationServices
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.MapView
+import com.google.android.gms.maps.model.BitmapDescriptorFactory
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.MarkerOptions
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
+import java.text.Normalizer
 
 class MapaFragment : Fragment() {
 
@@ -69,7 +73,13 @@ class MapaFragment : Fragment() {
             val btnSalvar = dialogView.findViewById<Button>(R.id.btnSalvar)
             val btnGetLocation = dialogView.findViewById<Button>(R.id.btnGetLocation)
             val etLocalizacao = dialogView.findViewById<EditText>(R.id.etLocalizacao)
-            val etNomeFruta = dialogView.findViewById<EditText>(R.id.etNomeFruta)
+            val etNomeFruta = dialogView.findViewById<AutoCompleteTextView>(R.id.etNomeFruta)
+
+            // Configurando o AutoCompleteTextView com frutas pré-definidas
+            val frutasPredefinidas = arrayOf("Maçã", "Banana", "Manga", "Laranja", "Abacate", "Pêra", "Uva", "Limão", "Goiaba", "Maracuja", "Abacaxi", "Melancia", "Pitaya", "Acerola", "Jabuticaba", "Caqui")
+            val adapter = ArrayAdapter(requireContext(), android.R.layout.simple_dropdown_item_1line, frutasPredefinidas)
+            etNomeFruta.setAdapter(adapter)
+            etNomeFruta.threshold = 1
 
             var latitude = 0.0
             var longitude = 0.0
@@ -91,7 +101,10 @@ class MapaFragment : Fragment() {
 
             // Botão para salvar a fruta
             btnSalvar.setOnClickListener {
-                val nomeFruta = etNomeFruta.text.toString().trim()
+                val nomeFruta = Normalizer.normalize( // retirando espaços, caracteres especiais, acentos e colocando em minúsculo
+                    etNomeFruta.text.toString().trim().lowercase(),
+                    Normalizer.Form.NFD
+                ).replace("\\p{Mn}+".toRegex(), "")
                 val enderecoStr = etLocalizacao.text.toString().trim()
 
                 if (nomeFruta.isEmpty() || enderecoStr.isEmpty()) {
@@ -125,7 +138,8 @@ class MapaFragment : Fragment() {
                     "latitude_fruta" to latitude,
                     "longitude_fruta" to longitude,
                     "id_user_cad" to currentUserUid,
-                    "endereco_fruta" to enderecoStr
+                    "endereco_fruta" to enderecoStr,
+                    "ic_fruta" to "ic_${nomeFruta}"
                 )
 
                 db.collection("pontos_frutas")
@@ -192,6 +206,7 @@ class MapaFragment : Fragment() {
                         val latitude = document.data["latitude_fruta"]?.toString()?.toDoubleOrNull() ?: continue
                         val longitude = document.data["longitude_fruta"]?.toString()?.toDoubleOrNull() ?: continue
                         val nome = document.data["tipo_fruta"]?.toString() ?: "Ponto de Fruta"
+                        val ic_fruta = document.data["ic_fruta"]?.toString() ?: "ic_default"
 
                         // Se tivermos a localização do usuário, filtramos apenas num raio de 5km (5000 metros)
                         if (userLocation != null) {
@@ -207,8 +222,16 @@ class MapaFragment : Fragment() {
                             }
                         }
 
+                        //pega o icone da fruta dentro do drawable
+                        var idIcone = resources.getIdentifier(
+                            ic_fruta,
+                            "drawable",
+                            requireContext().packageName
+                        )
+
                         val ponto = LatLng(latitude, longitude)
-                        googleMap?.addMarker(MarkerOptions().position(ponto).title(nome))
+                        googleMap?.addMarker(MarkerOptions().position(ponto).title(nome).icon(
+                            BitmapDescriptorFactory.fromResource(idIcone)))
                     }
                 }.addOnFailureListener {
                     Toast.makeText(requireContext(), "Erro ao carregar pontos: ${it.message}", Toast.LENGTH_LONG).show()
@@ -228,9 +251,19 @@ class MapaFragment : Fragment() {
                 val latitude = document.data["latitude_fruta"]?.toString()?.toDoubleOrNull() ?: continue
                 val longitude = document.data["longitude_fruta"]?.toString()?.toDoubleOrNull() ?: continue
                 val nome = document.data["tipo_fruta"]?.toString() ?: "Ponto de Fruta"
+                val ic_fruta = document.data["ic_fruta"]?.toString() ?: "ic_default"
 
                 val ponto = LatLng(latitude, longitude)
-                googleMap?.addMarker(MarkerOptions().position(ponto).title(nome))
+
+                //pega o icone da fruta dentro do drawable
+                var idIcone = resources.getIdentifier(
+                    ic_fruta,
+                    "drawable",
+                    requireContext().packageName
+                )
+
+                googleMap?.addMarker(MarkerOptions().position(ponto).title(nome).icon(
+                    BitmapDescriptorFactory.fromResource(idIcone)))
             }
         }
     }
