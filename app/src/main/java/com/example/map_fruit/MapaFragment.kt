@@ -139,7 +139,8 @@ class MapaFragment : Fragment() {
                     "longitude_fruta" to longitude,
                     "id_user_cad" to currentUserUid,
                     "endereco_fruta" to enderecoStr,
-                    "ic_fruta" to "ic_${nomeFruta}"
+                    "ic_fruta" to "ic_${nomeFruta}",
+                    "dt_cadastro" to com.google.firebase.firestore.FieldValue.serverTimestamp()
                 )
 
                 db.collection("pontos_frutas")
